@@ -7,6 +7,6 @@ export const Arr = Array(30).fill(0).map(
     userId : idx, 
     userName : RandomUserName(),
     content : `${idx+1}content`,
-    timeStarmp: Date.now(),
+    timeStamp: Date.now(),
   })
 )
