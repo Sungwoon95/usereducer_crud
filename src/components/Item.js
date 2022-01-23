@@ -18,8 +18,6 @@ const Item = (props) => {
     isEditToggle();
   }
 
-  
-
   return (
     <div className='Item'>
       <p>이름:{props.userName}</p>
