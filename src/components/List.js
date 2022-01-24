@@ -1,35 +1,45 @@
-import React,{useState} from 'react';
+import React,{useReducer} from 'react';
 
 import {Arr} from './Arr'
 import Item from './Item'
 import Input from './Input'
 
+const reducer = (state, action) => {
+  switch(action.type){
+    case 'CREATE':{
+      const newContent = {
+        ...action.data,
+        userId: action.data.length + 1,
+        timestamp: Date.now
+      }
+      return [newContent, ...state]
+    }
+    case 'REMOVE':{
+      return state.filter(item=>
+        item.userId !== action.targetId)
+    }
+    case 'UPDATE':{
+      return state.map(item=>
+        item.userId === action.targetId ? {...item, content:action.content} :item)
+    }
+    default:
+      return state;
+  }
+}
+
 const List = () => {
-  const [data, setData] = useState(Arr)
+  const [data, dispatch] = useReducer(reducer, Arr)
 
   const onCreate = (name, content) => {
-    const newData = {
-      userId : data.length + 1, 
-      userName : name,
-      content : content,
-      timeStarmp: Date.now(),
-    }
-    setData([newData, ...data])
+    dispatch({type:"CREATE", data:{userName:name, content}})
   }
 
   const onRemove = (targetId) => {
-    const newDataList = data.filter((item)=>(
-      item.userId !== targetId
-    ))
-    setData(newDataList)
+    dispatch({type:'REMOVE', targetId})
   }
 
   const onUpdate = (targetId, content) => {
-    setData(
-      data.map((item) => (
-        targetId === item.userId ? {...item, content} : item
-      ))
-    )
+    dispatch({type:'UPDATE', targetId, content})
   }
 
   return(
